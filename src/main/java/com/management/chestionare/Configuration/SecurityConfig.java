@@ -14,5 +14,6 @@ public class SecurityConfig {
                 .withUser("user").password("{noop}password").roles("USER")
                 .and()
                 .withUser("admin").password("{noop}admin").roles("ADMIN");
+
     }
 }

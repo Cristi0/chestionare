@@ -1,14 +1,23 @@
 package com.management.chestionare.Controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.management.chestionare.Repository.RepoUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
+@Controller
 public class Hello {
 
-    @RequestMapping("/")
-    public String index() {
-        return "Greetings from Spring Boot!";
+    @Autowired
+    RepoUser users;
+
+    @GetMapping("/")
+    public String index(Model model) {
+
+        model.addAttribute("users", users.findAll());
+        model.addAttribute("message", "Tymeleaf");
+        return "ad/first.html";
     }
 
 }
