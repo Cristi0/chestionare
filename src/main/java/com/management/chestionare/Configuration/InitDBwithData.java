@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SpellCheckingInspection")
 @Component
 public class InitDBwithData {
     @Autowired
@@ -35,48 +36,52 @@ public class InitDBwithData {
         addDataIfNotExist(variantaDeRaspuns,this::varianteRaspuns);
     }
 
-    private void addDataIfNotExist(JpaRepository repo, Runnable function){
-        if(!(repo.count()>0)) {
+    private void addDataIfNotExist(JpaRepository repo, Runnable function) {
+        if (!(repo.count() > 0)) {
             function.run();
         }
     }
+
     private void utilizatori() {
         List<Utilizator> utilizatori = new ArrayList<>(5);
-        utilizatori.add(new Utilizator(0L,"Admin", Rol.ADMINISTRATOR,"admin", "admin"));
-        utilizatori.add(new Utilizator(0L,"Profesor", Rol.ADMINISTRATOR,"prof", "prof"));
-        utilizatori.add(new Utilizator(0L,"Popa Cristi", Rol.UTILIZATOR_OBISNUIT,"cristi", "cristi"));
-        utilizatori.add(new Utilizator(0L,"Adrian Trinc", Rol.UTILIZATOR_OBISNUIT,"adrian", "adrina"));
-        utilizatori.add(new Utilizator(0L,"User", Rol.UTILIZATOR_OBISNUIT,"user", "user"));
-
+        utilizatori.add(new Utilizator(0L, "Admin", Rol.ADMINISTRATOR, "admin", "admin"));
+        utilizatori.add(new Utilizator(0L, "Profesor", Rol.ADMINISTRATOR, "prof", "prof"));
+        utilizatori.add(new Utilizator(0L, "Popa Cristi", Rol.UTILIZATOR_OBISNUIT, "cristi", "cristi"));
+        utilizatori.add(new Utilizator(0L, "Adrian Trinc", Rol.UTILIZATOR_OBISNUIT, "adrian", "adrina"));
+        utilizatori.add(new Utilizator(0L, "User", Rol.UTILIZATOR_OBISNUIT, "user", "user"));
         utilizator.saveAll(utilizatori);
         utilizator.flush();
     }
 
-    private void chestionare(){
+    private void chestionare() {
         List<Chestionar> chestionare = new ArrayList<>(5);
         //todo: add data
         chestionar.saveAll(chestionare);
         chestionar.flush();
     }
-    private void chestionareEfectuate(){
+
+    private void chestionareEfectuate() {
         List<ChestionarEfectuat> chestionareEfectuate = new ArrayList<>(5);
         //todo: add data
         chestionarEfectuat.saveAll(chestionareEfectuate);
         chestionarEfectuat.flush();
     }
-    private void intrebari(){
+
+    private void intrebari() {
         List<Intrebare> intrebari = new ArrayList<>(5);
         //todo: add data
         intrebare.saveAll(intrebari);
         intrebare.flush();
     }
-    private void intrebariEfectuate(){
+
+    private void intrebariEfectuate() {
         List<IntrebareEfectuata> intrebariEfectuate = new ArrayList<>(5);
         //todo: add data
         intrebareEfectuata.saveAll(intrebariEfectuate);
         intrebareEfectuata.flush();
     }
-    private void varianteRaspuns(){
+
+    private void varianteRaspuns() {
         List<VariantaDeRaspuns> variantaRaspuns = new ArrayList<>(5);
         //todo: add data
         variantaDeRaspuns.saveAll(variantaRaspuns);

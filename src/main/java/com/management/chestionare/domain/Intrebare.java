@@ -30,6 +30,12 @@ public class Intrebare {
     @Setter
     private Integer numarDePuncte;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chestionar_id")
+    @Getter
+    @Setter
+    private Chestionar chestionar;
+
     @OneToMany(
             fetch = FetchType.LAZY,
             mappedBy = "intrebare",
@@ -45,6 +51,7 @@ public class Intrebare {
                 "intrebareId=" + intrebareId +
                 ", continut='" + continut + '\'' +
                 ", numarDePuncte=" + numarDePuncte +
+                ", chestionar=" + chestionar +
                 ", varianteDeRaspuns=" + varianteDeRaspuns +
                 '}';
     }
