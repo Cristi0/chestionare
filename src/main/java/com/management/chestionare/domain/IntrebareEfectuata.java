@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"SpellCheckingInspection", "JpaDataSourceORMInspection"})
+@SuppressWarnings({"JpaDataSourceORMInspection"})
 @Entity
 @Table(name = "intrebare_efectuata")
 @NoArgsConstructor

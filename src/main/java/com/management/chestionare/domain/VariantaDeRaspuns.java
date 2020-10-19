@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@SuppressWarnings({"SpellCheckingInspection", "JpaDataSourceORMInspection"})
+@SuppressWarnings({"JpaDataSourceORMInspection"})
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,7 +40,6 @@ public class VariantaDeRaspuns {
                 "variraspunsId=" + variraspunsId +
                 ", continut='" + continut + '\'' +
                 ", variantaCorecta=" + variantaCorecta +
-                ", intrebare=" + intrebare +
                 '}';
     }
 }

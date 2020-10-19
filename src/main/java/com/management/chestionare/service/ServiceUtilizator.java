@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@SuppressWarnings("SpellCheckingInspection")
 @Service
 public class ServiceUtilizator {
     private final RepoUtilizator repoUtilizator;

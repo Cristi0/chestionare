@@ -21,10 +21,12 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
     </head>
     <body>
-        <div class="container">
-            <a href="http://localhost:8080/logout">Logout</a>
-            <p th:text="'Buna ziua ' + ${numePrenume} + '!'">Buna ziua!</p>
-            <table class="table table-sm table-bordered table-striped w-auto">
+        <div class="container mt-5">
+            <p th:text="'Buna ziua ' + ${numePrenume} + '!'" style="margin-bottom: 15px;margin-top: 0">Buna ziua!</p>
+            <a href="http://localhost:8080/adaugareChestionar" style="display: block;margin-bottom: 15px;margin-top: 0">Adauga chestionar</a>
+            <a href="http://localhost:8080/logout" style="display: block;margin-bottom: 15px;margin-top: 0">Logout</a>
+            <p style="margin-bottom: 15px;margin-top: 0">Toate chestionarele:</p>
+            <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
                     <tr>
                         <th>ID Chestionar</th>
@@ -56,6 +58,58 @@
                             </td>
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
                             <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+            <p style="margin-bottom: 15px;margin-top: 0">Chestionarele proprii:</p>
+            <table class="table table-sm table-bordered table-striped text-center w-auto">
+                <thead>
+                    <tr>
+                        <th>ID Chestionar</th>
+                        <th>Descriere</th>
+                        <th>Numar de intrebari</th>
+                        <th>Utilizator creator</th>
+                        <th>Sterge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="chestionar,iter : ${listaDeChestionareAdministratorCurent}">
+                        <tr th:if="${iter.index % 2 == 0}" class="table-info">
+                            <td th:text="${chestionar.chestionarId}"></td>
+                            <td>
+                                <a
+                                        th:text="${chestionar.descriere}"
+                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                </a>
+                            </td>
+                            <td th:text="${chestionar.numarDeIntrebari}"></td>
+                            <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
+                            <td>
+                                <form
+                                        th:action="@{http://localhost:8080/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
+                                        th:method="POST">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm m-0 waves-effect">Sterge</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${iter.index % 2 == 1}">
+                            <td th:text="${chestionar.chestionarId}"></td>
+                            <td>
+                                <a
+                                        th:text="${chestionar.descriere}"
+                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                </a>
+                            </td>
+                            <td th:text="${chestionar.numarDeIntrebari}"></td>
+                            <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
+                            <td>
+                                <form
+                                        th:action="@{http://localhost:8080/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
+                                        th:method="POST">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm m-0 waves-effect">Sterge</button>
+                                </form>
+                            </td>
                         </tr>
                     </th:block>
                 </tbody>

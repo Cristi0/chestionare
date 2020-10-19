@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@SuppressWarnings("SpellCheckingInspection")
 @Repository
 public interface RepoUtilizator extends JpaRepository<Utilizator, Long> {
     Optional<Utilizator> findUtilizatorByNumeDeUtilizator(String numeDeUtilizator);

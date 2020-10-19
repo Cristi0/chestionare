@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@SuppressWarnings("SpellCheckingInspection")
 @Repository
 public interface RepoIntrebare extends JpaRepository<Intrebare, Long> {
     List<Intrebare> findAllByChestionar_ChestionarId(Long chestionarId);
+    List<Intrebare> deleteAllByChestionar_ChestionarId(Long chestionarId);
+    List<Intrebare> findAllByChestionar_UtilizatorCreator_NumeDeUtilizator(String numeDeUtilizator);
 }
