@@ -3,8 +3,10 @@ package com.management.chestionare.Controller;
 import com.management.chestionare.domain.Chestionar;
 import com.management.chestionare.domain.Rol;
 import com.management.chestionare.domain.Utilizator;
+import com.management.chestionare.mapper.MapperChestionarEfectuat;
 import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
+import com.management.chestionare.service.ServiceChestionarEfectuat;
 import com.management.chestionare.service.ServiceIntrebare;
 import com.management.chestionare.service.ServiceUtilizator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +30,19 @@ public class WebpageController {
     private final ServiceUtilizator serviceUtilizator;
     private final ServiceIntrebare serviceIntrebare;
     private final ServiceChestionar serviceChestionar;
+    private final ServiceChestionarEfectuat serviceChestionarEfectuat;
     private final MapperIntrebare mapperIntrebare;
+    private final MapperChestionarEfectuat mapperChestionarEfectuat;
 
     @Autowired
-    public WebpageController(RestTemplate restTemplate, ServiceUtilizator serviceUtilizator, ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, MapperIntrebare mapperIntrebare) {
+    public WebpageController(RestTemplate restTemplate, ServiceUtilizator serviceUtilizator, ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceChestionarEfectuat serviceChestionarEfectuat, MapperIntrebare mapperIntrebare, MapperChestionarEfectuat mapperChestionarEfectuat) {
         this.restTemplate = restTemplate;
         this.serviceUtilizator = serviceUtilizator;
         this.serviceIntrebare = serviceIntrebare;
         this.serviceChestionar = serviceChestionar;
+        this.serviceChestionarEfectuat = serviceChestionarEfectuat;
         this.mapperIntrebare = mapperIntrebare;
+        this.mapperChestionarEfectuat = mapperChestionarEfectuat;
     }
 
     @GetMapping("/")
@@ -68,6 +74,19 @@ public class WebpageController {
                         .anyMatch(r -> r.getAuthority().equals("ROLE_" + Rol.UTILIZATOR_OBISNUIT.toString()));
                 System.out.println(hasUserRole);
                 if (hasUserRole) {
+                    Optional<Utilizator> utilizatorOptional = serviceUtilizator.findUtilizatorByNumeDeUtilizator(currentUserName);
+                    if (utilizatorOptional.isPresent()) {
+                        Utilizator utilizatorObisnuit = utilizatorOptional.get();
+                        model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
+                        System.out.println(model.getAttribute("numePrenume"));
+                        model.addAttribute("listaDeChestionare", serviceChestionar.findAll());
+                        model.addAttribute("listaDeChestionareEfectuateDeUtilizatorulCurent", mapperChestionarEfectuat
+                                .chestionareEfectuateToChestionareEfectuateDTO(
+                                        serviceChestionarEfectuat
+                                                .findAllByUtilizator_NumeDeUtilizator(currentUserName)
+                                )
+                        );
+                    }
                     return "htmlfiles/utilizatorObisnuit/utilizatorObisnuit.html";
                 } else {
                     model.addAttribute("titlu", "Conectare esuata");

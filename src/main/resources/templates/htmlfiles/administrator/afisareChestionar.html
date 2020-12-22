@@ -58,6 +58,12 @@
                         <a th:if="${autor != null}"
                            th:href="@{http://localhost:8081/adaugareVariantaDeRaspunsPtIntrebare/{intrebareId}(intrebareId=${intrebare.intrebareId})}"
                            class="btn btn-primary">Adauga varianta de raspuns</a>
+                        <form
+                                th:action="@{http://localhost:8081/sterge-intrebare/{intrebareId}(intrebareId=${intrebare.intrebareId})}"
+                                th:method="POST"
+                                style="display: inline;margin-left: 7px">
+                            <button type="submit" class="btn btn-danger btn-rounded my-0">Sterge</button>
+                        </form>
                     </div>
                 </div>
             </th:block>

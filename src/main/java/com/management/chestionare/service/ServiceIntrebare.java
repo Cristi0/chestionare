@@ -44,4 +44,10 @@ public class ServiceIntrebare {
         chestionar.setNumarDeIntrebari(chestionar.getNumarDeIntrebari() + 1);
         return repoIntrebare.saveAndFlush(intrebare);
     }
+
+    @Transactional
+    public void delete(Chestionar chestionar, Intrebare intrebare) {
+        chestionar.setNumarDeIntrebari(chestionar.getNumarDeIntrebari() - 1);
+        repoIntrebare.delete(intrebare);
+    }
 }

@@ -207,4 +207,50 @@ public class ControllerChestionar {
             return "htmlfiles/general/invalid.html";
         }
     }
+
+    @GetMapping("/rezolva-chestionar/{chestionarId}")
+    public String rezolvaChestionar(@PathVariable Long chestionarId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            boolean hasUserRole = authentication
+                    .getAuthorities()
+                    .stream()
+                    .anyMatch(r -> r.getAuthority().equals("ROLE_" + Rol.UTILIZATOR_OBISNUIT.toString()));
+            String currentUserName = authentication.getName();
+            if (hasUserRole) {
+                Optional<Utilizator> utilizatorOptional = serviceUtilizator.findUtilizatorByNumeDeUtilizator(currentUserName);
+                if (utilizatorOptional.isPresent()) {
+                    Utilizator utilizatorObisnuit = utilizatorOptional.get();
+                    Optional<Chestionar> chestionarOptional = serviceChestionar.findById(chestionarId);
+                    if (chestionarOptional.isPresent()) {
+                        Chestionar chestionar = chestionarOptional.get();
+
+                        model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
+                        model.addAttribute("chestionar", chestionar);
+                        List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionarId);
+                        List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
+                        model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+
+                        return "htmlfiles/utilizatorObisnuit/rezolvaChestionar.html";
+                    } else {
+                        model.addAttribute("titlu", "Eroare chestionar");
+                        model.addAttribute("mesaj", "Chestionar inexistent.");
+                        return "htmlfiles/general/invalid.html";
+                    }
+                } else {
+                    model.addAttribute("titlu", "Eroare nume de utilizator");
+                    model.addAttribute("mesaj", "Nume de utilizator inexistent.");
+                    return "htmlfiles/general/invalid.html";
+                }
+            } else {
+                model.addAttribute("titlu", "Eroare rol de utilizator obisnuit");
+                model.addAttribute("mesaj", "Nu aveti rol de utilizator obisnuit.");
+                return "htmlfiles/general/invalid.html";
+            }
+        } else {
+            model.addAttribute("titlu", "Eroare server");
+            model.addAttribute("mesaj", "Probleme cu SecurityContext.");
+            return "htmlfiles/general/invalid.html";
+        }
+    }
 }

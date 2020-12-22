@@ -22,10 +22,11 @@
     </head>
     <body>
         <div class="container mt-5">
-            <p th:text="'Buna ziua ' + ${numePrenume} + '!'" style="margin-bottom: 15px;margin-top: 0">Buna ziua!</p>
-            <a href="http://localhost:8081/adaugareChestionar" style="display: block;margin-bottom: 15px;margin-top: 0">Adauga chestionar</a>
-            <a href="http://localhost:8081/logout" style="display: block;margin-bottom: 15px;margin-top: 0">Logout</a>
-            <p style="margin-bottom: 15px;margin-top: 0">Toate chestionarele:</p>
+            <p th:text="'Buna ziua ' + ${numePrenume} + '!'" style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Buna ziua!</p>
+            <a href="http://localhost:8081/adaugareChestionar" style="font-weight: bold;display: block;margin-bottom: 15px;margin-top: 0">Adauga chestionar</a>
+            <a href="http://localhost:8081/logout" style="font-weight: bold;display: block;margin-bottom: 15px;margin-top: 0">Logout</a>
+            <hr style="height:1px;border:none;color:#333;background-color:#333;">
+            <p style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Toate chestionarele:</p>
             <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
                     <tr>
@@ -62,7 +63,8 @@
                     </th:block>
                 </tbody>
             </table>
-            <p style="margin-bottom: 15px;margin-top: 0">Chestionarele proprii:</p>
+            <hr style="height:1px;border:none;color:#333;background-color:#333;">
+            <p style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Chestionarele proprii:</p>
             <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
                     <tr>

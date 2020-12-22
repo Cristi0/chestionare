@@ -1,7 +1,6 @@
 package com.management.chestionare.service;
 
 import com.management.chestionare.Repository.RepoUtilizator;
-import com.management.chestionare.domain.Intrebare;
 import com.management.chestionare.domain.Utilizator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

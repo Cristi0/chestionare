@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "SpringJavaAutowiredFieldsWarningInspection", "rawtypes"})
 @Component
 public class InitDBwithData {
     @Autowired
     private RepoChestionar repoChestionar;
     @Autowired
-    private RepoChestionarEfectuat chestionarEfectuat;
+    private RepoChestionarEfectuat repoChestionarEfectuat;
     @Autowired
     private RepoIntrebare repoIntrebare;
     @Autowired
-    private RepoIntrebareEfectuata intrebareEfectuata;
+    private RepoIntrebareEfectuata repoIntrebareEfectuata;
     @Autowired
     private RepoUtilizator repoUtilizator;
     @Autowired
@@ -33,10 +33,10 @@ public class InitDBwithData {
     public void init() {
         addDataIfNotExist(repoUtilizator, this::utilizatori);
         addDataIfNotExist(repoChestionar, this::chestionare);
-        addDataIfNotExist(chestionarEfectuat, this::chestionareEfectuate);
         addDataIfNotExist(repoIntrebare, this::intrebari);
-        addDataIfNotExist(intrebareEfectuata, this::intrebariEfectuate);
         addDataIfNotExist(repoVariantaDeRaspuns, this::varianteRaspuns);
+        addDataIfNotExist(repoChestionarEfectuat, this::chestionareEfectuate);
+        addDataIfNotExist(repoIntrebareEfectuata, this::intrebariEfectuate);
     }
 
     private void addDataIfNotExist(JpaRepository repo, Runnable function) {
@@ -72,9 +72,28 @@ public class InitDBwithData {
 
     private void chestionareEfectuate() {
         List<ChestionarEfectuat> chestionareEfectuate = new ArrayList<>(5);
-        //todo: add data
-        chestionarEfectuat.saveAll(chestionareEfectuate);
-        chestionarEfectuat.flush();
+
+        List<Chestionar> chestionare = new ArrayList<>(5);
+        Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, utilizatorImplicit);
+        chestionare.add(repoChestionar.findById((long) 1).orElse(chestionarImplicit));
+        chestionare.add(repoChestionar.findById((long) 2).orElse(chestionarImplicit));
+        chestionare.add(repoChestionar.findById((long) 3).orElse(chestionarImplicit));
+        chestionare.add(repoChestionar.findById((long) 4).orElse(chestionarImplicit));
+        chestionare.add(repoChestionar.findById((long) 5).orElse(chestionarImplicit));
+
+        Utilizator utilizatorObisnuit1 = repoUtilizator.findById((long) 5).orElse(utilizatorImplicit);
+
+        ChestionarEfectuat chestionarEfectuat1 = new ChestionarEfectuat(0L, chestionare.get(0), utilizatorObisnuit1,6);
+        ChestionarEfectuat chestionarEfectuat2 = new ChestionarEfectuat(0L, chestionare.get(1), utilizatorObisnuit1,9);
+        ChestionarEfectuat chestionarEfectuat3 = new ChestionarEfectuat(0L, chestionare.get(2), utilizatorObisnuit1,0);
+
+        chestionareEfectuate.add(chestionarEfectuat1);
+        chestionareEfectuate.add(chestionarEfectuat2);
+        chestionareEfectuate.add(chestionarEfectuat3);
+
+        repoChestionarEfectuat.saveAll(chestionareEfectuate);
+        repoChestionarEfectuat.flush();
     }
 
     private void intrebari() {
@@ -119,9 +138,51 @@ public class InitDBwithData {
 
     private void intrebariEfectuate() {
         List<IntrebareEfectuata> intrebariEfectuate = new ArrayList<>(5);
-        //todo: add data
-        intrebareEfectuata.saveAll(intrebariEfectuate);
-        intrebareEfectuata.flush();
+
+        List<ChestionarEfectuat> chestionareEfectuate = new ArrayList<>(5);
+
+        Utilizator adminImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, adminImplicit);
+        Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.UTILIZATOR_OBISNUIT, "numeDeUtilizator0", "parola0");
+        ChestionarEfectuat chestionarEfectuatImplicit = new ChestionarEfectuat(0L, chestionarImplicit, utilizatorImplicit,0);
+
+        chestionareEfectuate.add(repoChestionarEfectuat.findById((long) 1).orElse(chestionarEfectuatImplicit));
+        chestionareEfectuate.add(repoChestionarEfectuat.findById((long) 2).orElse(chestionarEfectuatImplicit));
+        chestionareEfectuate.add(repoChestionarEfectuat.findById((long) 3).orElse(chestionarEfectuatImplicit));
+
+        List<Intrebare> intrebari = new ArrayList<>(11);
+        Intrebare intrebareImplicita = new Intrebare(0L, "continut0", 0, chestionarImplicit, new HashSet<>());
+
+        intrebari.add(repoIntrebare.findById((long) 1).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 2).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 3).orElse(intrebareImplicita));
+
+        intrebari.add(repoIntrebare.findById((long) 4).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 5).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 6).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 7).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 8).orElse(intrebareImplicita));
+
+        intrebari.add(repoIntrebare.findById((long) 9).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 10).orElse(intrebareImplicita));
+        intrebari.add(repoIntrebare.findById((long) 11).orElse(intrebareImplicita));
+
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(0), true, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(1), true, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(2), true, chestionareEfectuate.get(0)));
+
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(3), true, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(4), false, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(5), true, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(6), false, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(7), true, chestionareEfectuate.get(0)));
+
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(8), false, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(9), false, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(10), false, chestionareEfectuate.get(0)));
+
+        repoIntrebareEfectuata.saveAll(intrebariEfectuate);
+        repoIntrebareEfectuata.flush();
     }
 
     private void varianteRaspuns() {

@@ -5,6 +5,8 @@ import com.management.chestionare.domain.Intrebare;
 import com.management.chestionare.domain.Rol;
 import com.management.chestionare.domain.Utilizator;
 import com.management.chestionare.dtodomain.AdaugareIntrebareDTO;
+import com.management.chestionare.dtodomain.IntrebareDTO;
+import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
 import com.management.chestionare.service.ServiceIntrebare;
 import com.management.chestionare.service.ServiceUtilizator;
@@ -14,12 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -28,12 +28,14 @@ public class ControllerIntrebare {
     private final ServiceIntrebare serviceIntrebare;
     private final ServiceChestionar serviceChestionar;
     private final ServiceUtilizator serviceUtilizator;
+    private final MapperIntrebare mapperIntrebare;
 
     @Autowired
-    public ControllerIntrebare(ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceUtilizator serviceUtilizator) {
+    public ControllerIntrebare(ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceUtilizator serviceUtilizator, MapperIntrebare mapperIntrebare) {
         this.serviceIntrebare = serviceIntrebare;
         this.serviceChestionar = serviceChestionar;
         this.serviceUtilizator = serviceUtilizator;
+        this.mapperIntrebare = mapperIntrebare;
     }
 
     @PostMapping("/intrebare/format-json")
@@ -128,6 +130,62 @@ public class ControllerIntrebare {
                     } else {
                         model.addAttribute("titlu", "Eroare chestionar");
                         model.addAttribute("mesaj", "Chestionar inexistent.");
+                        return "htmlfiles/general/invalid.html";
+                    }
+                } else {
+                    model.addAttribute("titlu", "Eroare nume de utilizator");
+                    model.addAttribute("mesaj", "Nume de utilizator inexistent.");
+                    return "htmlfiles/general/invalid.html";
+                }
+            } else {
+                model.addAttribute("titlu", "Eroare rol de administrator");
+                model.addAttribute("mesaj", "Nu aveti rol de administrator.");
+                return "htmlfiles/general/invalid.html";
+            }
+        } else {
+            model.addAttribute("titlu", "Eroare server");
+            model.addAttribute("mesaj", "Probleme cu SecurityContext.");
+            return "htmlfiles/general/invalid.html";
+        }
+    }
+
+    @PostMapping("/sterge-intrebare/{intrebareId}")
+    public String stergereIntrebare(@PathVariable Long intrebareId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            boolean hasAdministratorRole = authentication
+                    .getAuthorities()
+                    .stream()
+                    .anyMatch(r -> r.getAuthority().equals("ROLE_" + Rol.ADMINISTRATOR.toString()));
+            String currentUserName = authentication.getName();
+            if (hasAdministratorRole) {
+                Optional<Utilizator> utilizatorOptional = serviceUtilizator.findUtilizatorByNumeDeUtilizator(currentUserName);
+                if (utilizatorOptional.isPresent()) {
+                    Utilizator administrator = utilizatorOptional.get();
+                    Optional<Intrebare> intrebareOptional = serviceIntrebare.findById(intrebareId);
+                    if (intrebareOptional.isPresent()) {
+
+                        Intrebare intrebare = intrebareOptional.get();
+                        Chestionar chestionar = intrebare.getChestionar();
+
+                        if (administrator.getUtilizatorId().equals(chestionar.getUtilizatorCreator().getUtilizatorId())) {
+                            serviceIntrebare.delete(chestionar, intrebare);
+
+                            model.addAttribute("autor", true);
+                            model.addAttribute("chestionar", chestionar);
+                            List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                            List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
+                            model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+
+                            return "htmlfiles/administrator/afisareChestionar.html";
+                        } else {
+                            model.addAttribute("titlu", "Eroare permisiune");
+                            model.addAttribute("mesaj", "Nu aveti permisunea de stergere a unei intrebari al unui chestionar pentru care nu sunteti autor.");
+                            return "htmlfiles/general/invalid.html";
+                        }
+                    } else {
+                        model.addAttribute("titlu", "Eroare intrebare");
+                        model.addAttribute("mesaj", "Intrebare inexistenta.");
                         return "htmlfiles/general/invalid.html";
                     }
                 } else {

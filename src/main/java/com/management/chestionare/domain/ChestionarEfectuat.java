@@ -23,7 +23,7 @@ public class ChestionarEfectuat {
     @JoinColumn(name = "chestionar_id")
     @Getter
     @Setter
-    private Chestionar chestionar_id;
+    private Chestionar chestionar;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utilizator_id")
@@ -31,12 +31,18 @@ public class ChestionarEfectuat {
     @Setter
     private Utilizator utilizator;
 
+    @Column(name = "punctaj_obtinut")
+    @Getter
+    @Setter
+    private Integer punctajObtinut;
+
     @Override
     public String toString() {
         return "ChestionarEfectuat{" +
                 "chestionarEfectuatId=" + chestionarEfectuatId +
-                ", chestionar_id=" + chestionar_id +
+                ", chestionar=" + chestionar +
                 ", utilizator=" + utilizator +
+                ", punctajObtinut=" + punctajObtinut +
                 '}';
     }
 }
