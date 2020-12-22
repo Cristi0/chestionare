@@ -14,10 +14,10 @@
     </head>
     <body>
         <div class="container mt-5">
-            <a href="http://localhost:8080" style="display: block;margin-bottom: 15px">Pagina principala</a>
-            <a href="http://localhost:8080/logout" style="display: block;margin-bottom: 15px">Logout</a>
+            <a href="http://localhost:8081" style="display: block;margin-bottom: 15px">Pagina principala</a>
+            <a href="http://localhost:8081/logout" style="display: block;margin-bottom: 15px">Logout</a>
             <h3>Chestionar nou</h3>
-            <form method="POST" th:action="@{http://localhost:8080/chestionar}">
+            <form method="POST" th:action="@{http://localhost:8081/chestionar}">
                 <label for="descriere">Descriere:</label>
                 <input type="text" id="descriere" name="descriere"><br>
                 <button type="submit" class="btn btn-primary">Adaugare</button>

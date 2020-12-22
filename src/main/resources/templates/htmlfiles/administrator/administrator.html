@@ -23,8 +23,8 @@
     <body>
         <div class="container mt-5">
             <p th:text="'Buna ziua ' + ${numePrenume} + '!'" style="margin-bottom: 15px;margin-top: 0">Buna ziua!</p>
-            <a href="http://localhost:8080/adaugareChestionar" style="display: block;margin-bottom: 15px;margin-top: 0">Adauga chestionar</a>
-            <a href="http://localhost:8080/logout" style="display: block;margin-bottom: 15px;margin-top: 0">Logout</a>
+            <a href="http://localhost:8081/adaugareChestionar" style="display: block;margin-bottom: 15px;margin-top: 0">Adauga chestionar</a>
+            <a href="http://localhost:8081/logout" style="display: block;margin-bottom: 15px;margin-top: 0">Logout</a>
             <p style="margin-bottom: 15px;margin-top: 0">Toate chestionarele:</p>
             <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
@@ -42,7 +42,7 @@
                             <td>
                                 <a
                                         th:text="${chestionar.descriere}"
-                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                        th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionar.chestionarId})}">
                                 </a>
                             </td>
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
@@ -53,7 +53,7 @@
                             <td>
                                 <a
                                         th:text="${chestionar.descriere}"
-                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                        th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionar.chestionarId})}">
                                 </a>
                             </td>
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
@@ -80,14 +80,14 @@
                             <td>
                                 <a
                                         th:text="${chestionar.descriere}"
-                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                        th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionar.chestionarId})}">
                                 </a>
                             </td>
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
                             <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
                             <td>
                                 <form
-                                        th:action="@{http://localhost:8080/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
+                                        th:action="@{http://localhost:8081/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
                                         th:method="POST">
                                         <button type="submit" class="btn btn-outline-primary btn-sm m-0 waves-effect">Sterge</button>
                                 </form>
@@ -98,14 +98,14 @@
                             <td>
                                 <a
                                         th:text="${chestionar.descriere}"
-                                        th:href="@{http://localhost:8080/chestionar/{path}(path=${chestionar.chestionarId})}">
+                                        th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionar.chestionarId})}">
                                 </a>
                             </td>
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
                             <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
                             <td>
                                 <form
-                                        th:action="@{http://localhost:8080/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
+                                        th:action="@{http://localhost:8081/sterge-chestionar/{chestionarId}(chestionarId=${chestionar.chestionarId})}"
                                         th:method="POST">
                                         <button type="submit" class="btn btn-outline-primary btn-sm m-0 waves-effect">Sterge</button>
                                 </form>

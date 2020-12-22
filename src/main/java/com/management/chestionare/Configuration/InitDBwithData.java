@@ -50,7 +50,7 @@ public class InitDBwithData {
         utilizatori.add(new Utilizator(0L, "Admin", Rol.ADMINISTRATOR, "admin", "admin"));
         utilizatori.add(new Utilizator(0L, "Profesor", Rol.ADMINISTRATOR, "prof", "prof"));
         utilizatori.add(new Utilizator(0L, "Popa Cristi", Rol.UTILIZATOR_OBISNUIT, "cristi", "cristi"));
-        utilizatori.add(new Utilizator(0L, "Adrian Trinc", Rol.UTILIZATOR_OBISNUIT, "adrian", "adrina"));
+        utilizatori.add(new Utilizator(0L, "Adrian Trinc", Rol.UTILIZATOR_OBISNUIT, "adrian", "adrian"));
         utilizatori.add(new Utilizator(0L, "User", Rol.UTILIZATOR_OBISNUIT, "user", "user"));
         repoUtilizator.saveAll(utilizatori);
         repoUtilizator.flush();
