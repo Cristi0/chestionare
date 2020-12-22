@@ -36,7 +36,7 @@
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
                             <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
                             <td>
-                                <a th:href="@{http://localhost:8081/rezolva-chestionar/{path}(path=${chestionar.chestionarId})}"
+                                <a th:href="@{http://localhost:8081/rezolva-chestionar/{chestionarIdPath}(chestionarIdPath=${chestionar.chestionarId})}"
                                    class="btn btn-primary">Rezolva</a>
                             </td>
                         </tr>
@@ -46,7 +46,7 @@
                             <td th:text="${chestionar.numarDeIntrebari}"></td>
                             <td th:text="${chestionar.utilizatorCreator.numePrenume}"></td>
                             <td>
-                                <a th:href="@{http://localhost:8081/rezolva-chestionar/{path}(path=${chestionar.chestionarId})}"
+                                <a th:href="@{http://localhost:8081/rezolva-chestionar/{chestionarIdPath}(chestionarIdPath=${chestionar.chestionarId})}"
                                    class="btn btn-primary">Rezolva</a>
                             </td>
                         </tr>
@@ -75,7 +75,7 @@
                         <td th:text="${chestionarEfectuat.chestionar.numePrenumeUtilizatorCreator}"></td>
                         <td th:text="${chestionarEfectuat.punctajObtinut}"></td>
                         <td>
-                            <a th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionarEfectuat.chestionarEfectuatId})}"
+                            <a th:href="@{http://localhost:8081/chestionar/{chestionarEfectuatIdPath}(chestionarEfectuatIdPath=${chestionarEfectuat.chestionarEfectuatId})}"
                                class="btn btn-primary">Vizualizeaza rezultat</a>
                         </td>
                     </tr>
@@ -86,7 +86,7 @@
                         <td th:text="${chestionarEfectuat.chestionar.numePrenumeUtilizatorCreator}"></td>
                         <td th:text="${chestionarEfectuat.punctajObtinut}"></td>
                         <td>
-                            <a th:href="@{http://localhost:8081/chestionar/{path}(path=${chestionarEfectuat.chestionarEfectuatId})}"
+                            <a th:href="@{http://localhost:8081/chestionar/{chestionarEfectuatIdPath}(chestionarEfectuatIdPath=${chestionarEfectuat.chestionarEfectuatId})}"
                                class="btn btn-primary">Vizualizeaza rezultat</a>
                         </td>
                     </tr>
