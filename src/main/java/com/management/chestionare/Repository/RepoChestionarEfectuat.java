@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RepoChestionarEfectuat extends JpaRepository<ChestionarEfectuat, Long> {
     List<ChestionarEfectuat> findAllByUtilizator_NumeDeUtilizator(String numeDeUtilizator);
+    boolean existsChestionarEfectuatByChestionar_ChestionarId(Long chestionarId);
 }

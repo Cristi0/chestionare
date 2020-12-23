@@ -36,8 +36,9 @@
                                 <div class="custom-control custom-radio">
                                     <input class="custom-control-input"
                                            type="radio"
-                                           th:name="'variantaIntrebare' + ${intrebare.intrebareId}"
+                                           th:name="'varianteIntrebare' + ${intrebare.intrebareId}"
                                            th:id="'varianta' + ${varianta.variraspunsId}"
+                                           th:value="${varianta.variraspunsId}"
                                     />
                                     <label class="custom-control-label"
                                            th:for="'varianta' + ${varianta.variraspunsId}"

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,16 @@ public class ServiceIntrebare {
     @Transactional(readOnly = true)
     public Optional<Intrebare> findById(Long id) {
         return repoIntrebare.findById(id);
+    }
+
+    @Transactional
+    public List<Intrebare> saveAll(List<Intrebare> intrebari) {
+        List<Intrebare> intrebariReturnate = new ArrayList<>();
+        for (Intrebare intrebare : intrebari) {
+            Intrebare intrebareReturnata = repoIntrebare.saveAndFlush(intrebare);
+            intrebariReturnate.add(intrebareReturnata);
+        }
+        return intrebariReturnate;
     }
 
     @Transactional

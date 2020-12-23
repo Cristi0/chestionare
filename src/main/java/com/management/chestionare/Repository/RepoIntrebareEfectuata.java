@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RepoIntrebareEfectuata extends JpaRepository<IntrebareEfectuata, Long> {
+    boolean existsIntrebareEfectuataByIntrebare_IntrebareId(Long intrebareId);
 }

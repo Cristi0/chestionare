@@ -6,7 +6,7 @@ import com.management.chestionare.domain.Utilizator;
 import com.management.chestionare.mapper.MapperChestionarEfectuat;
 import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
-import com.management.chestionare.service.ServiceChestionarEfectuat;
+import com.management.chestionare.service.ServiceChestionarEfectSiIntrebareEfect;
 import com.management.chestionare.service.ServiceIntrebare;
 import com.management.chestionare.service.ServiceUtilizator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +30,17 @@ public class WebpageController {
     private final ServiceUtilizator serviceUtilizator;
     private final ServiceIntrebare serviceIntrebare;
     private final ServiceChestionar serviceChestionar;
-    private final ServiceChestionarEfectuat serviceChestionarEfectuat;
+    private final ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect;
     private final MapperIntrebare mapperIntrebare;
     private final MapperChestionarEfectuat mapperChestionarEfectuat;
 
     @Autowired
-    public WebpageController(RestTemplate restTemplate, ServiceUtilizator serviceUtilizator, ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceChestionarEfectuat serviceChestionarEfectuat, MapperIntrebare mapperIntrebare, MapperChestionarEfectuat mapperChestionarEfectuat) {
+    public WebpageController(RestTemplate restTemplate, ServiceUtilizator serviceUtilizator, ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare, MapperChestionarEfectuat mapperChestionarEfectuat) {
         this.restTemplate = restTemplate;
         this.serviceUtilizator = serviceUtilizator;
         this.serviceIntrebare = serviceIntrebare;
         this.serviceChestionar = serviceChestionar;
-        this.serviceChestionarEfectuat = serviceChestionarEfectuat;
+        this.serviceChestionarEfectSiIntrebareEfect = serviceChestionarEfectSiIntrebareEfect;
         this.mapperIntrebare = mapperIntrebare;
         this.mapperChestionarEfectuat = mapperChestionarEfectuat;
     }
@@ -82,7 +82,7 @@ public class WebpageController {
                         model.addAttribute("listaDeChestionare", serviceChestionar.findAll());
                         model.addAttribute("listaDeChestionareEfectuateDeUtilizatorulCurent", mapperChestionarEfectuat
                                 .chestionareEfectuateToChestionareEfectuateDTO(
-                                        serviceChestionarEfectuat
+                                        serviceChestionarEfectSiIntrebareEfect
                                                 .findAllByUtilizator_NumeDeUtilizator(currentUserName)
                                 )
                         );

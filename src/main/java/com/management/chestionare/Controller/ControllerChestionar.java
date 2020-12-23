@@ -8,6 +8,7 @@ import com.management.chestionare.dtodomain.AdaugareChestionarDTO;
 import com.management.chestionare.dtodomain.IntrebareDTO;
 import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
+import com.management.chestionare.service.ServiceChestionarEfectSiIntrebareEfect;
 import com.management.chestionare.service.ServiceIntrebare;
 import com.management.chestionare.service.ServiceUtilizator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,15 @@ public class ControllerChestionar {
     private final ServiceChestionar serviceChestionar;
     private final ServiceIntrebare serviceIntrebare;
     private final ServiceUtilizator serviceUtilizator;
+    private final ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect;
     private final MapperIntrebare mapperIntrebare;
 
     @Autowired
-    public ControllerChestionar(ServiceChestionar serviceChestionar, ServiceIntrebare serviceIntrebare, ServiceUtilizator serviceUtilizator, MapperIntrebare mapperIntrebare) {
+    public ControllerChestionar(ServiceChestionar serviceChestionar, ServiceIntrebare serviceIntrebare, ServiceUtilizator serviceUtilizator, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare) {
         this.serviceChestionar = serviceChestionar;
         this.serviceIntrebare = serviceIntrebare;
         this.serviceUtilizator = serviceUtilizator;
+        this.serviceChestionarEfectSiIntrebareEfect = serviceChestionarEfectSiIntrebareEfect;
         this.mapperIntrebare = mapperIntrebare;
     }
 
@@ -176,7 +179,16 @@ public class ControllerChestionar {
                     if (chestionarOptional.isPresent()) {
                         Chestionar chestionar = chestionarOptional.get();
                         if (administrator.getUtilizatorId().equals(chestionar.getUtilizatorCreator().getUtilizatorId())) {
-                            serviceChestionar.delete(chestionar);
+                            boolean existaChestionarEfectuat = serviceChestionarEfectSiIntrebareEfect
+                                    .existsChestionarEfectuatByChestionar_ChestionarId(chestionarId);
+                            if (!existaChestionarEfectuat) {
+                                serviceChestionar.delete(chestionar);
+                                model.addAttribute("succes", true);
+                                model.addAttribute("mesajSucces", "Chestionarul a fost sters.");
+                            } else {
+                                model.addAttribute("succes", false);
+                                model.addAttribute("mesajEroare", "Stergerea nu poate fi facuta. Chestionarul a fost rezolvat de cel putin o persoana.");
+                            }
                             model.addAttribute("listaDeChestionare", serviceChestionar.findAll());
                             model.addAttribute("listaDeChestionareAdministratorCurent", serviceChestionar
                                     .findAllByUtilizatorCreator_NumeDeUtilizator(currentUserName));

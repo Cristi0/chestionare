@@ -61,7 +61,7 @@ public class ControllerVariantaDeRaspuns {
                                     continut,
                                     variantaCorecta,
                                     intrebare);
-                            serviceVariantaDeRaspuns.save(variantaDeRaspuns);
+                            serviceVariantaDeRaspuns.save(intrebare, variantaDeRaspuns);
                             model.addAttribute("succes", true);
                             model.addAttribute("intrebareId", intrebareId);
                             return "htmlfiles/administrator/adaugareVariantaDeRaspunsPtIntrebare.html";
@@ -110,7 +110,7 @@ public class ControllerVariantaDeRaspuns {
 
                         VariantaDeRaspuns variantaDeRaspuns = variantaDeRaspunsOptional.get();
                         Intrebare intrebare = variantaDeRaspuns.getIntrebare();
-                        Chestionar chestionar=intrebare.getChestionar();
+                        Chestionar chestionar = intrebare.getChestionar();
                         Utilizator utilizatorCreator = chestionar.getUtilizatorCreator();
 
                         if (administrator.getUtilizatorId().equals(utilizatorCreator.getUtilizatorId())) {

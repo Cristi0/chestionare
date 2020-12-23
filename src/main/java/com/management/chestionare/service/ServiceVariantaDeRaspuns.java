@@ -25,8 +25,10 @@ public class ServiceVariantaDeRaspuns {
     }
 
     @Transactional
-    public VariantaDeRaspuns save(VariantaDeRaspuns variantaDeRaspuns) {
-        return repoVariantaDeRaspuns.saveAndFlush(variantaDeRaspuns);
+    public VariantaDeRaspuns save(Intrebare intrebare, VariantaDeRaspuns variantaDeRaspuns) {
+        VariantaDeRaspuns variantaDeRaspunsReturnata = repoVariantaDeRaspuns.saveAndFlush(variantaDeRaspuns);
+        intrebare.getVarianteDeRaspuns().add(variantaDeRaspunsReturnata);
+        return variantaDeRaspunsReturnata;
     }
 
     @Transactional

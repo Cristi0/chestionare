@@ -1,13 +1,11 @@
 package com.management.chestionare.Controller;
 
-import com.management.chestionare.domain.Chestionar;
-import com.management.chestionare.domain.Intrebare;
-import com.management.chestionare.domain.Rol;
-import com.management.chestionare.domain.Utilizator;
+import com.management.chestionare.domain.*;
 import com.management.chestionare.dtodomain.AdaugareIntrebareDTO;
 import com.management.chestionare.dtodomain.IntrebareDTO;
 import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
+import com.management.chestionare.service.ServiceChestionarEfectSiIntrebareEfect;
 import com.management.chestionare.service.ServiceIntrebare;
 import com.management.chestionare.service.ServiceUtilizator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +26,15 @@ public class ControllerIntrebare {
     private final ServiceIntrebare serviceIntrebare;
     private final ServiceChestionar serviceChestionar;
     private final ServiceUtilizator serviceUtilizator;
+    private final ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect;
     private final MapperIntrebare mapperIntrebare;
 
     @Autowired
-    public ControllerIntrebare(ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceUtilizator serviceUtilizator, MapperIntrebare mapperIntrebare) {
+    public ControllerIntrebare(ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceUtilizator serviceUtilizator, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare) {
         this.serviceIntrebare = serviceIntrebare;
         this.serviceChestionar = serviceChestionar;
         this.serviceUtilizator = serviceUtilizator;
+        this.serviceChestionarEfectSiIntrebareEfect = serviceChestionarEfectSiIntrebareEfect;
         this.mapperIntrebare = mapperIntrebare;
     }
 
@@ -169,13 +169,25 @@ public class ControllerIntrebare {
                         Chestionar chestionar = intrebare.getChestionar();
 
                         if (administrator.getUtilizatorId().equals(chestionar.getUtilizatorCreator().getUtilizatorId())) {
-                            serviceIntrebare.delete(chestionar, intrebare);
+                            boolean existaIntrebareEfectuata = serviceChestionarEfectSiIntrebareEfect
+                                    .existsIntrebareEfectuataByIntrebare_IntrebareId(intrebareId);
 
-                            model.addAttribute("autor", true);
-                            model.addAttribute("chestionar", chestionar);
-                            List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
-                            List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
-                            model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            if (!existaIntrebareEfectuata) {
+                                serviceIntrebare.delete(chestionar, intrebare);
+
+                                model.addAttribute("autor", true);
+                                model.addAttribute("chestionar", chestionar);
+                                List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                                List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
+                                model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            } else {
+                                Chestionar chestionarNou = CloneUtils.clone(chestionar);
+                                serviceChestionar.save(chestionarNou);
+                                List<Intrebare> intrebariChestionarVechi = serviceIntrebare
+                                        .findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                                List<Intrebare> intrebariChestionarNou = CloneUtils.clone(intrebariChestionarVechi, chestionarNou);
+                                serviceIntrebare.saveAll(intrebariChestionarNou);
+                            }
 
                             return "htmlfiles/administrator/afisareChestionar.html";
                         } else {

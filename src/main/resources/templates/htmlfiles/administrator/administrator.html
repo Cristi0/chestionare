@@ -64,6 +64,18 @@
                 </tbody>
             </table>
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
+            <span th:if="${succes != null}">
+                <div th:if="${succes}"
+                     th:text="${mesajSucces}"
+                     class="alert alert-success"
+                     role="alert">
+                </div>
+                <div th:unless="${succes}"
+                     th:text="${mesajEroare}"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+            </span>
             <p style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Chestionarele proprii:</p>
             <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
