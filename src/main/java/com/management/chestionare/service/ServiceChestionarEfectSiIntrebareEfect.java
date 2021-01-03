@@ -102,6 +102,7 @@ public class ServiceChestionarEfectSiIntrebareEfect {
             }
             ChestionarEfectuat chestionarEfectuatReturnat = repoChestionarEfectuat.saveAndFlush(chestionarEfectuat);
             for (IntrebareEfectuata intrebareEfectuata : intrebariEfectuate) {
+                intrebareEfectuata.setChestionarEfectuat(chestionarEfectuatReturnat);
                 repoIntrebareEfectuata.saveAndFlush(intrebareEfectuata);
             }
             return chestionarEfectuatReturnat;

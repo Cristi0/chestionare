@@ -31,7 +31,7 @@ public class IntrebareEfectuata {
     private Boolean aleasaCorect;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chestionare_id")
+    @JoinColumn(name = "chestionar_efectuat_id")
     @Getter
     @Setter
     private ChestionarEfectuat chestionarEfectuat;
