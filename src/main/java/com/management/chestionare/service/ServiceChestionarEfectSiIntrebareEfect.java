@@ -28,6 +28,11 @@ public class ServiceChestionarEfectSiIntrebareEfect {
     }
 
     @Transactional(readOnly = true)
+    public Optional<ChestionarEfectuat> findById(Long id) {
+        return repoChestionarEfectuat.findById(id);
+    }
+
+    @Transactional(readOnly = true)
     public List<ChestionarEfectuat> findAllByUtilizator_NumeDeUtilizator(String numeDeUtilizator) {
         return repoChestionarEfectuat.findAllByUtilizator_NumeDeUtilizator(numeDeUtilizator);
     }
@@ -35,6 +40,11 @@ public class ServiceChestionarEfectSiIntrebareEfect {
     @Transactional(readOnly = true)
     public boolean existsChestionarEfectuatByChestionar_ChestionarId(Long chestionarId) {
         return repoChestionarEfectuat.existsChestionarEfectuatByChestionar_ChestionarId(chestionarId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IntrebareEfectuata> findAllByChestionarEfectuat_ChestionarEfectuatId(Long chestionarEfectuatId) {
+        return repoIntrebareEfectuata.findAllByChestionarEfectuat_ChestionarEfectuatId(chestionarEfectuatId);
     }
 
     @Transactional(readOnly = true)

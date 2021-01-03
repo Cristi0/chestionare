@@ -50,9 +50,35 @@ public class ServiceChestionar {
     }
 
     @Transactional
+    public void update(Chestionar chestionar, String descriereNoua) {
+        chestionar.setDescriere(descriereNoua);
+    }
+
+    @Transactional
     public List<Intrebare> delete(Chestionar chestionar) {
         List<Intrebare> intrebari = repoIntrebare.deleteAllByChestionar_ChestionarId(chestionar.getChestionarId());
         repoChestionar.delete(chestionar);
         return intrebari;
+    }
+
+    @Transactional
+    public void verificaFinalizare(Chestionar chestionar) {
+        List<Intrebare> intrebariChestionar = repoIntrebare
+                .findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+        Optional<Boolean> chestionarFinalizatInOptional = intrebariChestionar
+                .stream()
+                .map(Intrebare::getFinalizata)
+                .reduce(Boolean::logicalAnd);
+        if (chestionarFinalizatInOptional.isPresent()) {
+            boolean chestionarFinalizat = chestionarFinalizatInOptional.get();
+            chestionar.setFinalizat(chestionarFinalizat);
+        } else {
+            chestionar.setFinalizat(false);
+        }
+    }
+
+    @Transactional
+    public void setFinalizare(Chestionar chestionar, Boolean finalizare) {
+        chestionar.setFinalizat(finalizare);
     }
 }

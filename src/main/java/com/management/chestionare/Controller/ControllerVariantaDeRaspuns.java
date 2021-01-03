@@ -3,9 +3,7 @@ package com.management.chestionare.Controller;
 import com.management.chestionare.domain.*;
 import com.management.chestionare.dtodomain.IntrebareDTO;
 import com.management.chestionare.mapper.MapperIntrebare;
-import com.management.chestionare.service.ServiceIntrebare;
-import com.management.chestionare.service.ServiceUtilizator;
-import com.management.chestionare.service.ServiceVariantaDeRaspuns;
+import com.management.chestionare.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,14 +23,18 @@ import java.util.Optional;
 public class ControllerVariantaDeRaspuns {
     private final ServiceVariantaDeRaspuns serviceVariantaDeRaspuns;
     private final ServiceIntrebare serviceIntrebare;
+    private final ServiceChestionar serviceChestionar;
     private final ServiceUtilizator serviceUtilizator;
+    private final ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect;
     private final MapperIntrebare mapperIntrebare;
 
     @Autowired
-    public ControllerVariantaDeRaspuns(ServiceVariantaDeRaspuns serviceVariantaDeRaspuns, ServiceIntrebare serviceIntrebare, ServiceUtilizator serviceUtilizator, MapperIntrebare mapperIntrebare) {
+    public ControllerVariantaDeRaspuns(ServiceVariantaDeRaspuns serviceVariantaDeRaspuns, ServiceIntrebare serviceIntrebare, ServiceChestionar serviceChestionar, ServiceUtilizator serviceUtilizator, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare) {
         this.serviceVariantaDeRaspuns = serviceVariantaDeRaspuns;
         this.serviceIntrebare = serviceIntrebare;
+        this.serviceChestionar = serviceChestionar;
         this.serviceUtilizator = serviceUtilizator;
+        this.serviceChestionarEfectSiIntrebareEfect = serviceChestionarEfectSiIntrebareEfect;
         this.mapperIntrebare = mapperIntrebare;
     }
 
@@ -62,6 +64,8 @@ public class ControllerVariantaDeRaspuns {
                                     variantaCorecta,
                                     intrebare);
                             serviceVariantaDeRaspuns.save(intrebare, variantaDeRaspuns);
+                            serviceIntrebare.verificaFinalizare(intrebare);
+                            serviceChestionar.verificaFinalizare(intrebare.getChestionar());
                             model.addAttribute("succes", true);
                             model.addAttribute("intrebareId", intrebareId);
                             return "htmlfiles/administrator/adaugareVariantaDeRaspunsPtIntrebare.html";
@@ -114,13 +118,55 @@ public class ControllerVariantaDeRaspuns {
                         Utilizator utilizatorCreator = chestionar.getUtilizatorCreator();
 
                         if (administrator.getUtilizatorId().equals(utilizatorCreator.getUtilizatorId())) {
-                            serviceVariantaDeRaspuns.delete(intrebare, variantaDeRaspuns);
+                            boolean existaIntrebareEfectuata = serviceChestionarEfectSiIntrebareEfect
+                                    .existsIntrebareEfectuataByIntrebare_IntrebareId(intrebare.getIntrebareId());
 
-                            model.addAttribute("autor", true);
-                            model.addAttribute("chestionar", chestionar);
-                            List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
-                            List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
-                            model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            if (!existaIntrebareEfectuata) {
+                                serviceVariantaDeRaspuns.delete(intrebare, variantaDeRaspuns);
+                                serviceIntrebare.verificaFinalizare(intrebare);
+                                serviceChestionar.verificaFinalizare(chestionar);
+
+                                model.addAttribute("deschideModal", false);
+                                model.addAttribute("succes", true);
+                                model.addAttribute("mesajSucces", "Varianta de raspuns a fost stearsa.");
+                                model.addAttribute("autor", true);
+                                model.addAttribute("chestionar", chestionar);
+                                List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                                List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
+                                model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            } else {
+                                Chestionar chestionarNou = CloneUtils.clone(chestionar, true);
+                                Chestionar chestionarNouReturnat = serviceChestionar.save(chestionarNou);
+                                serviceChestionar.update(chestionarNouReturnat, "Chestionar" + chestionarNouReturnat.getChestionarId());
+                                List<Intrebare> intrebariChestionarVechi = serviceIntrebare
+                                        .findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                                List<Intrebare> intrebariChestionarNou = CloneUtils.cloneCuVariantaDeRaspunsStearsa(
+                                        intrebariChestionarVechi,
+                                        chestionarNouReturnat,
+                                        intrebare.getIntrebareId(),
+                                        variraspunsId);
+                                List<Intrebare> intrebariReturnateChestionarNou = serviceIntrebare.saveAll(intrebariChestionarNou);
+
+                                Optional<Intrebare> intrebareNouaOptional = intrebariChestionarNou
+                                        .stream()
+                                        .filter(intrebareIter -> intrebareIter.getIntrebareId().equals(intrebare.getIntrebareId()))
+                                        .findFirst();
+                                if (intrebareNouaOptional.isPresent()) {
+                                    Intrebare intrebareNoua = intrebareNouaOptional.get();
+                                    serviceIntrebare.verificaFinalizare(intrebareNoua);
+                                    serviceChestionar.verificaFinalizare(chestionarNouReturnat);
+                                }
+
+                                model.addAttribute("deschideModal", true);
+                                model.addAttribute("titluModal", "Creare chestionar");
+                                model.addAttribute("mesajPentruModalBody", "A fost creat un chestionar nou.");
+                                model.addAttribute("succes", true);
+                                model.addAttribute("mesajSucces", "Varianta de raspuns a fost stearsa.");
+                                model.addAttribute("autor", true);
+                                model.addAttribute("chestionar", chestionarNouReturnat);
+                                List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariReturnateChestionarNou);
+                                model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            }
 
                             return "htmlfiles/administrator/afisareChestionar.html";
                         } else {

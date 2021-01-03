@@ -59,6 +59,7 @@ public class ControllerIntrebare {
                                     0L,
                                     adaugareIntrebareDTO.continut,
                                     adaugareIntrebareDTO.numarDePuncte,
+                                    false,
                                     chestionar,
                                     new HashSet<>());
                             serviceIntrebare.save(chestionar, intrebare);
@@ -111,16 +112,53 @@ public class ControllerIntrebare {
                     if (chestionarOptional.isPresent()) {
                         Chestionar chestionar = chestionarOptional.get();
                         if (administrator.getUtilizatorId().equals(chestionar.getUtilizatorCreator().getUtilizatorId())) {
-                            Intrebare intrebare = new Intrebare(
-                                    0L,
-                                    continut,
-                                    numarDePuncte,
-                                    chestionar,
-                                    new HashSet<>());
-                            serviceIntrebare.save(chestionar, intrebare);
-                            model.addAttribute("succes", true);
-                            model.addAttribute("listaDeChestionareAdministratorCurent", serviceChestionar
-                                    .findAllByUtilizatorCreator_NumeDeUtilizator(currentUserName));
+                            boolean existaChestionarEfectuat = serviceChestionarEfectSiIntrebareEfect
+                                    .existsChestionarEfectuatByChestionar_ChestionarId(chestionarId);
+                            if (!existaChestionarEfectuat) {
+                                Intrebare intrebare = new Intrebare(
+                                        0L,
+                                        continut,
+                                        numarDePuncte,
+                                        false,
+                                        chestionar,
+                                        new HashSet<>());
+                                serviceIntrebare.save(chestionar, intrebare);
+                                serviceChestionar.setFinalizare(chestionar, false);
+
+                                model.addAttribute("deschideModal", false);
+                                model.addAttribute("succes", true);
+                                model.addAttribute("chestionar", chestionar);
+                                model.addAttribute("listaDeChestionareAdministratorCurent", serviceChestionar
+                                        .findAllByUtilizatorCreator_NumeDeUtilizator(currentUserName));
+                            }else {
+                                Chestionar chestionarNou = CloneUtils.clone(chestionar, false);
+                                Chestionar chestionarNouReturnat = serviceChestionar.save(chestionarNou);
+                                serviceChestionar.update(chestionarNouReturnat, "Chestionar" + chestionarNouReturnat.getChestionarId());
+                                List<Intrebare> intrebariChestionarVechi = serviceIntrebare
+                                        .findAllByChestionar_ChestionarId(chestionar.getChestionarId());
+                                List<Intrebare> intrebariChestionarNou = CloneUtils.clone(
+                                        intrebariChestionarVechi,
+                                        chestionarNouReturnat);
+                                Intrebare intrebare = new Intrebare(
+                                        0L,
+                                        continut,
+                                        numarDePuncte,
+                                        false,
+                                        chestionarNouReturnat,
+                                        new HashSet<>());
+                                intrebariChestionarNou.add(intrebare);
+                                List<Intrebare> intrebariReturnateChestionarNou = serviceIntrebare.saveAll(intrebariChestionarNou);
+                                serviceChestionar.verificaFinalizare(chestionarNouReturnat);
+
+                                model.addAttribute("deschideModal", true);
+                                model.addAttribute("titluModal", "Creare chestionar");
+                                model.addAttribute("mesajPentruModalBody", "A fost creat un chestionar nou.");
+                                model.addAttribute("succes", true);
+                                model.addAttribute("chestionar", chestionarNouReturnat);
+                                model.addAttribute("listaDeChestionareAdministratorCurent", serviceChestionar
+                                        .findAllByUtilizatorCreator_NumeDeUtilizator(currentUserName));
+                            }
+
                             return "htmlfiles/administrator/adaugareIntrebarePtChestionar.html";
                         } else {
                             model.addAttribute("titlu", "Eroare permisiune");
@@ -174,19 +212,38 @@ public class ControllerIntrebare {
 
                             if (!existaIntrebareEfectuata) {
                                 serviceIntrebare.delete(chestionar, intrebare);
+                                serviceChestionar.verificaFinalizare(chestionar);
 
+                                model.addAttribute("deschideModal", false);
+                                model.addAttribute("succes", true);
+                                model.addAttribute("mesajSucces", "Intrebarea a fost stearsa.");
                                 model.addAttribute("autor", true);
                                 model.addAttribute("chestionar", chestionar);
                                 List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionar.getChestionarId());
                                 List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
                                 model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
                             } else {
-                                Chestionar chestionarNou = CloneUtils.clone(chestionar);
-                                serviceChestionar.save(chestionarNou);
+                                Chestionar chestionarNou = CloneUtils.clone(chestionar, true);
+                                Chestionar chestionarNouReturnat = serviceChestionar.save(chestionarNou);
+                                serviceChestionar.update(chestionarNouReturnat, "Chestionar" + chestionarNouReturnat.getChestionarId());
                                 List<Intrebare> intrebariChestionarVechi = serviceIntrebare
                                         .findAllByChestionar_ChestionarId(chestionar.getChestionarId());
-                                List<Intrebare> intrebariChestionarNou = CloneUtils.clone(intrebariChestionarVechi, chestionarNou);
-                                serviceIntrebare.saveAll(intrebariChestionarNou);
+                                List<Intrebare> intrebariChestionarNou = CloneUtils.cloneCuIntrebareStearsa(
+                                        intrebariChestionarVechi,
+                                        chestionarNouReturnat,
+                                        intrebareId);
+                                List<Intrebare> intrebariReturnateChestionarNou = serviceIntrebare.saveAll(intrebariChestionarNou);
+                                serviceChestionar.verificaFinalizare(chestionarNouReturnat);
+
+                                model.addAttribute("deschideModal", true);
+                                model.addAttribute("titluModal", "Creare chestionar");
+                                model.addAttribute("mesajPentruModalBody", "A fost creat un chestionar nou.");
+                                model.addAttribute("succes", true);
+                                model.addAttribute("mesajSucces", "Intrebarea a fost stearsa.");
+                                model.addAttribute("autor", true);
+                                model.addAttribute("chestionar", chestionarNouReturnat);
+                                List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariReturnateChestionarNou);
+                                model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
                             }
 
                             return "htmlfiles/administrator/afisareChestionar.html";

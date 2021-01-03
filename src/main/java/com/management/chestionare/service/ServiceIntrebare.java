@@ -1,8 +1,10 @@
 package com.management.chestionare.service;
 
 import com.management.chestionare.Repository.RepoIntrebare;
+import com.management.chestionare.Repository.RepoVariantaDeRaspuns;
 import com.management.chestionare.domain.Chestionar;
 import com.management.chestionare.domain.Intrebare;
+import com.management.chestionare.domain.VariantaDeRaspuns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ServiceIntrebare {
@@ -60,5 +63,20 @@ public class ServiceIntrebare {
     public void delete(Chestionar chestionar, Intrebare intrebare) {
         chestionar.setNumarDeIntrebari(chestionar.getNumarDeIntrebari() - 1);
         repoIntrebare.delete(intrebare);
+    }
+
+    @Transactional
+    public void verificaFinalizare(Intrebare intrebare) {
+        Set<VariantaDeRaspuns> varianteDeRaspunsIntrebare = intrebare.getVarianteDeRaspuns();
+        Optional<Boolean> intrebareFinalizataInOptional = varianteDeRaspunsIntrebare
+                .stream()
+                .map(VariantaDeRaspuns::getVariantaCorecta)
+                .reduce(Boolean::logicalOr);
+        if (intrebareFinalizataInOptional.isPresent()) {
+            boolean intrebareFinalizata = intrebareFinalizataInOptional.get();
+            intrebare.setFinalizata(intrebareFinalizata);
+        } else {
+            intrebare.setFinalizata(false);
+        }
     }
 }

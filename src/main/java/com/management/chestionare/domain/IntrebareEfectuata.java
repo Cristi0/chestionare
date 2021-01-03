@@ -17,7 +17,7 @@ public class IntrebareEfectuata {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "intrebare_efectuata_id")
     @Getter
-    private Long intrebare_efectuata_id;
+    private Long intrebareEfectuataId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "intrebare_id")
@@ -31,7 +31,7 @@ public class IntrebareEfectuata {
     private Boolean aleasaCorect;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chestionaref_id")
+    @JoinColumn(name = "chestionare_id")
     @Getter
     @Setter
     private ChestionarEfectuat chestionarEfectuat;
@@ -39,7 +39,7 @@ public class IntrebareEfectuata {
     @Override
     public String toString() {
         return "IntrebareEfectuata{" +
-                "intrebare_efectuata_id=" + intrebare_efectuata_id +
+                "intrebareEfectuataId=" + intrebareEfectuataId +
                 ", intrebare=" + intrebare +
                 ", aleasaCorect=" + aleasaCorect +
                 ", chestionarEfectuat=" + chestionarEfectuat +

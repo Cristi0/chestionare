@@ -61,11 +61,11 @@ public class InitDBwithData {
         Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
         utilizatori.add(repoUtilizator.findById((long) 1).orElse(utilizatorImplicit));
         List<Chestionar> chestionare = new ArrayList<>(5);
-        chestionare.add(new Chestionar(0L, "Chestionar1", 3, utilizatori.get(0)));
-        chestionare.add(new Chestionar(0L, "Chestionar2", 5, utilizatori.get(0)));
-        chestionare.add(new Chestionar(0L, "Chestionar3", 3, utilizatori.get(0)));
-        chestionare.add(new Chestionar(0L, "Chestionar4", 5, utilizatori.get(0)));
-        chestionare.add(new Chestionar(0L, "Chestionar5", 3, utilizatori.get(0)));
+        chestionare.add(new Chestionar(0L, "Chestionar1", 3,true, utilizatori.get(0)));
+        chestionare.add(new Chestionar(0L, "Chestionar2", 5,true, utilizatori.get(0)));
+        chestionare.add(new Chestionar(0L, "Chestionar3", 3,true, utilizatori.get(0)));
+        chestionare.add(new Chestionar(0L, "Chestionar4", 5,true, utilizatori.get(0)));
+        chestionare.add(new Chestionar(0L, "Chestionar5", 3,true, utilizatori.get(0)));
         repoChestionar.saveAll(chestionare);
         repoChestionar.flush();
     }
@@ -75,7 +75,7 @@ public class InitDBwithData {
 
         List<Chestionar> chestionare = new ArrayList<>(5);
         Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
-        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, utilizatorImplicit);
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0,true, utilizatorImplicit);
         chestionare.add(repoChestionar.findById((long) 1).orElse(chestionarImplicit));
         chestionare.add(repoChestionar.findById((long) 2).orElse(chestionarImplicit));
         chestionare.add(repoChestionar.findById((long) 3).orElse(chestionarImplicit));
@@ -99,7 +99,7 @@ public class InitDBwithData {
     private void intrebari() {
         List<Chestionar> chestionare = new ArrayList<>(5);
         Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
-        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, utilizatorImplicit);
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0,true, utilizatorImplicit);
         chestionare.add(repoChestionar.findById((long) 1).orElse(chestionarImplicit));
         chestionare.add(repoChestionar.findById((long) 2).orElse(chestionarImplicit));
         chestionare.add(repoChestionar.findById((long) 3).orElse(chestionarImplicit));
@@ -108,29 +108,29 @@ public class InitDBwithData {
 
         List<Intrebare> intrebari = new ArrayList<>(11);
 
-        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 1", 1, chestionare.get(0), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 1", 2, chestionare.get(0), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 1", 3, chestionare.get(0), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 1", 1,true, chestionare.get(0), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 1", 2,true, chestionare.get(0), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 1", 3,true, chestionare.get(0), new HashSet<>()));
 
-        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 2", 1, chestionare.get(1), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 2", 2, chestionare.get(1), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 2", 3, chestionare.get(1), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A patra intrebare din chestionarul 2", 4, chestionare.get(1), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A cincea intrebare din chestionarul 2", 5, chestionare.get(1), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 2", 1,true, chestionare.get(1), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 2", 2,true, chestionare.get(1), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 2", 3,true, chestionare.get(1), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A patra intrebare din chestionarul 2", 4,true, chestionare.get(1), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A cincea intrebare din chestionarul 2", 5,true, chestionare.get(1), new HashSet<>()));
 
-        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 3", 1, chestionare.get(2), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 3", 2, chestionare.get(2), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 3", 3, chestionare.get(2), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 3", 1,true, chestionare.get(2), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 3", 2,true, chestionare.get(2), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 3", 3,true, chestionare.get(2), new HashSet<>()));
 
-        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 4", 1, chestionare.get(3), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 4", 2, chestionare.get(3), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 4", 3, chestionare.get(3), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A patra intrebare din chestionarul 4", 4, chestionare.get(3), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A cincea intrebare din chestionarul 4", 5, chestionare.get(3), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 4", 1,true, chestionare.get(3), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 4", 2,true, chestionare.get(3), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 4", 3,true, chestionare.get(3), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A patra intrebare din chestionarul 4", 4,true, chestionare.get(3), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A cincea intrebare din chestionarul 4", 5,true, chestionare.get(3), new HashSet<>()));
 
-        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 5", 1, chestionare.get(4), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 5", 2, chestionare.get(4), new HashSet<>()));
-        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 5", 3, chestionare.get(4), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "Prima intrebare din chestionarul 5", 1,true, chestionare.get(4), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A doua intrebare din chestionarul 5", 2,true, chestionare.get(4), new HashSet<>()));
+        intrebari.add(new Intrebare(0L, "A treia intrebare din chestionarul 5", 3,true, chestionare.get(4), new HashSet<>()));
 
         repoIntrebare.saveAll(intrebari);
         repoIntrebare.flush();
@@ -142,7 +142,7 @@ public class InitDBwithData {
         List<ChestionarEfectuat> chestionareEfectuate = new ArrayList<>(5);
 
         Utilizator adminImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
-        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, adminImplicit);
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0,true, adminImplicit);
         Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.UTILIZATOR_OBISNUIT, "numeDeUtilizator0", "parola0");
         ChestionarEfectuat chestionarEfectuatImplicit = new ChestionarEfectuat(0L, chestionarImplicit, utilizatorImplicit,0);
 
@@ -151,7 +151,7 @@ public class InitDBwithData {
         chestionareEfectuate.add(repoChestionarEfectuat.findById((long) 3).orElse(chestionarEfectuatImplicit));
 
         List<Intrebare> intrebari = new ArrayList<>(11);
-        Intrebare intrebareImplicita = new Intrebare(0L, "continut0", 0, chestionarImplicit, new HashSet<>());
+        Intrebare intrebareImplicita = new Intrebare(0L, "continut0", 0,true, chestionarImplicit, new HashSet<>());
 
         intrebari.add(repoIntrebare.findById((long) 1).orElse(intrebareImplicita));
         intrebari.add(repoIntrebare.findById((long) 2).orElse(intrebareImplicita));
@@ -171,15 +171,15 @@ public class InitDBwithData {
         intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(1), true, chestionareEfectuate.get(0)));
         intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(2), true, chestionareEfectuate.get(0)));
 
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(3), true, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(4), false, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(5), true, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(6), false, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(7), true, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(3), true, chestionareEfectuate.get(1)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(4), false, chestionareEfectuate.get(1)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(5), true, chestionareEfectuate.get(1)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(6), false, chestionareEfectuate.get(1)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(7), true, chestionareEfectuate.get(1)));
 
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(8), false, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(9), false, chestionareEfectuate.get(0)));
-        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(10), false, chestionareEfectuate.get(0)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(8), false, chestionareEfectuate.get(2)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(9), false, chestionareEfectuate.get(2)));
+        intrebariEfectuate.add(new IntrebareEfectuata(0L, intrebari.get(10), false, chestionareEfectuate.get(2)));
 
         repoIntrebareEfectuata.saveAll(intrebariEfectuate);
         repoIntrebareEfectuata.flush();
@@ -189,8 +189,8 @@ public class InitDBwithData {
         List<Intrebare> intrebari = new ArrayList<>(5);
 
         Utilizator utilizatorImplicit = new Utilizator(0L, "numePrenume0", Rol.ADMINISTRATOR, "numeDeUtilizator0", "parola0");
-        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0, utilizatorImplicit);
-        Intrebare intrebareImplicita = new Intrebare(0L, "continut0", 0, chestionarImplicit, new HashSet<>());
+        Chestionar chestionarImplicit = new Chestionar(0L, "descriere0", 0,true, utilizatorImplicit);
+        Intrebare intrebareImplicita = new Intrebare(0L, "continut0", 0,true, chestionarImplicit, new HashSet<>());
 
         intrebari.add(repoIntrebare.findById((long) 1).orElse(intrebareImplicita));
         intrebari.add(repoIntrebare.findById((long) 2).orElse(intrebareImplicita));

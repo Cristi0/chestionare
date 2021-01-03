@@ -29,6 +29,11 @@ public class Chestionar {
     @Setter
     private Integer numarDeIntrebari;
 
+    @Column(name = "finalizat")
+    @Getter
+    @Setter
+    private Boolean finalizat;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utilizator_creator_id")
     @Getter

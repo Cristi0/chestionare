@@ -30,6 +30,11 @@ public class Intrebare {
     @Setter
     private Integer numarDePuncte;
 
+    @Column(name = "finalizata")
+    @Getter
+    @Setter
+    private Boolean finalizata;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chestionar_id")
     @Getter

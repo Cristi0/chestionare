@@ -26,6 +26,7 @@ public class MapperIntrebare {
         intrebareDTO.intrebareId = intrebare.getIntrebareId();
         intrebareDTO.continut = intrebare.getContinut();
         intrebareDTO.numarDePuncte = intrebare.getNumarDePuncte();
+        intrebareDTO.finalizata = intrebare.getFinalizata();
         intrebareDTO.varianteDeRaspuns = mapperVariantaDeRaspuns.varianteDeRaspunsToVarianteDeRaspunsDTO(intrebare.getVarianteDeRaspuns());
         return intrebareDTO;
     }

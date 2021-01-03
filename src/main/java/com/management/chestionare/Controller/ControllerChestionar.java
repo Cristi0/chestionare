@@ -103,6 +103,7 @@ public class ControllerChestionar {
                             0L,
                             adaugareChestionarDTO.descriere,
                             0,
+                            false,
                             administrator);
                     serviceChestionar.save(chestionar);
                     model.addAttribute("succes", true);
@@ -141,6 +142,7 @@ public class ControllerChestionar {
                             0L,
                             descriere,
                             0,
+                            false,
                             administrator);
                     serviceChestionar.save(chestionar);
                     model.addAttribute("succes", true);
@@ -189,6 +191,7 @@ public class ControllerChestionar {
                                 model.addAttribute("succes", false);
                                 model.addAttribute("mesajEroare", "Stergerea nu poate fi facuta. Chestionarul a fost rezolvat de cel putin o persoana.");
                             }
+                            model.addAttribute("numePrenume", administrator.getNumePrenume());
                             model.addAttribute("listaDeChestionare", serviceChestionar.findAll());
                             model.addAttribute("listaDeChestionareAdministratorCurent", serviceChestionar
                                     .findAllByUtilizatorCreator_NumeDeUtilizator(currentUserName));
