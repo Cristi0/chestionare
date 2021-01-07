@@ -249,7 +249,7 @@ public class ControllerChestionar {
                             List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionarId);
                             List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
                             model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
-                            
+
                             return "htmlfiles/utilizatorObisnuit/rezolvaChestionar.html";
                         } else {
                             model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
