@@ -6,6 +6,7 @@ import com.management.chestionare.domain.Rol;
 import com.management.chestionare.domain.Utilizator;
 import com.management.chestionare.dtodomain.AdaugareChestionarDTO;
 import com.management.chestionare.dtodomain.IntrebareDTO;
+import com.management.chestionare.mapper.MapperChestionarEfectuat;
 import com.management.chestionare.mapper.MapperIntrebare;
 import com.management.chestionare.service.ServiceChestionar;
 import com.management.chestionare.service.ServiceChestionarEfectSiIntrebareEfect;
@@ -30,14 +31,16 @@ public class ControllerChestionar {
     private final ServiceUtilizator serviceUtilizator;
     private final ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect;
     private final MapperIntrebare mapperIntrebare;
+    private final MapperChestionarEfectuat mapperChestionarEfectuat;
 
     @Autowired
-    public ControllerChestionar(ServiceChestionar serviceChestionar, ServiceIntrebare serviceIntrebare, ServiceUtilizator serviceUtilizator, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare) {
+    public ControllerChestionar(ServiceChestionar serviceChestionar, ServiceIntrebare serviceIntrebare, ServiceUtilizator serviceUtilizator, ServiceChestionarEfectSiIntrebareEfect serviceChestionarEfectSiIntrebareEfect, MapperIntrebare mapperIntrebare, MapperChestionarEfectuat mapperChestionarEfectuat) {
         this.serviceChestionar = serviceChestionar;
         this.serviceIntrebare = serviceIntrebare;
         this.serviceUtilizator = serviceUtilizator;
         this.serviceChestionarEfectSiIntrebareEfect = serviceChestionarEfectSiIntrebareEfect;
         this.mapperIntrebare = mapperIntrebare;
+        this.mapperChestionarEfectuat = mapperChestionarEfectuat;
     }
 
     @GetMapping("/chestionar/{chestionarId}")
@@ -240,13 +243,28 @@ public class ControllerChestionar {
                     if (chestionarOptional.isPresent()) {
                         Chestionar chestionar = chestionarOptional.get();
 
-                        model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
-                        model.addAttribute("chestionar", chestionar);
-                        List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionarId);
-                        List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
-                        model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                        if (chestionar.getFinalizat()) {
+                            model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
+                            model.addAttribute("chestionar", chestionar);
+                            List<Intrebare> intrebariChestionar = serviceIntrebare.findAllByChestionar_ChestionarId(chestionarId);
+                            List<IntrebareDTO> intrebariChestionarDTO = mapperIntrebare.intrebariToIntrebariDTO(intrebariChestionar);
+                            model.addAttribute("intrebariChestionar", intrebariChestionarDTO);
+                            
+                            return "htmlfiles/utilizatorObisnuit/rezolvaChestionar.html";
+                        } else {
+                            model.addAttribute("numePrenume", utilizatorObisnuit.getNumePrenume());
+                            model.addAttribute("listaDeChestionare", serviceChestionar.findAll());
+                            model.addAttribute("listaDeChestionareEfectuateDeUtilizatorulCurent", mapperChestionarEfectuat
+                                    .chestionareEfectuateToChestionareEfectuateDTO(
+                                            serviceChestionarEfectSiIntrebareEfect
+                                                    .findAllByUtilizator_NumeDeUtilizator(currentUserName)
+                                    )
+                            );
+                            model.addAttribute("succes", false);
+                            model.addAttribute("mesajEroare", "Chestionarul nu este finalizat.");
 
-                        return "htmlfiles/utilizatorObisnuit/rezolvaChestionar.html";
+                            return "htmlfiles/utilizatorObisnuit/utilizatorObisnuit.html";
+                        }
                     } else {
                         model.addAttribute("titlu", "Eroare chestionar");
                         model.addAttribute("mesaj", "Chestionar inexistent.");

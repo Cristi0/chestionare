@@ -17,6 +17,24 @@
             <p th:text="'Buna ziua ' + ${numePrenume} + '!'" style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Buna ziua!</p>
             <a style="font-weight: bold" href="http://localhost:8081/logout">Logout</a>
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
+            <span th:if="${succes != null}">
+                <div th:if="${succes}"
+                     th:text="${mesajSucces}"
+                     class="alert alert-success"
+                     role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div th:unless="${succes}"
+                     th:text="${mesajEroare}"
+                     class="alert alert-danger"
+                     role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </span>
             <p style="font-weight: bold;margin-bottom: 15px;margin-top: 0">Toate chestionarele:</p>
             <table class="table table-sm table-bordered table-striped text-center w-auto">
                 <thead>
