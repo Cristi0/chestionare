@@ -37,7 +37,9 @@ public class ControllerChestionarEfectuat {
     }
 
     @GetMapping("/chestionarEfectuat-pentruUtilizatorObisnuit/{chestionarEfectuatId}")
-    public String afisareChestionarPentruUtilizatorObisnuit(@PathVariable Long chestionarEfectuatId, Model model) {
+    public String afisareChestionarPentruUtilizatorObisnuit(
+            @PathVariable Long chestionarEfectuatId,
+            Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             boolean hasUserRole = authentication
@@ -83,8 +85,11 @@ public class ControllerChestionarEfectuat {
         }
     }
 
-    @PostMapping(value = "/rezolva-chestionar/{chestionarId}", consumes = {"application/x-www-form-urlencoded;charset=UTF-8"})
-    public String adaugareChestionar(@PathVariable Long chestionarId, @RequestParam MultiValueMap<String, String> paramMap, Model model) {
+    @PostMapping(value = "/rezolva-chestionar/{chestionarId}",
+            consumes = {"application/x-www-form-urlencoded;charset=UTF-8"})
+    public String adaugareChestionar(@PathVariable Long chestionarId,
+                                     @RequestParam MultiValueMap<String, String> paramMap,
+                                     Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             boolean hasUserRole = authentication

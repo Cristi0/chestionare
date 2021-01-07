@@ -48,7 +48,7 @@ public class Intrebare {
     )
     @Getter
     @Setter
-    private Set<VariantaDeRaspuns> varianteDeRaspuns;
+    private Set<VariantaDeRaspuns> varianteDeRaspuns; //entitatea Intrebare
 
     @Override
     public String toString() {

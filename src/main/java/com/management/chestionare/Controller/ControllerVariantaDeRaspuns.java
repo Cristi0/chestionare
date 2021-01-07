@@ -63,10 +63,14 @@ public class ControllerVariantaDeRaspuns {
                                     continut,
                                     variantaCorecta,
                                     intrebare);
-                            serviceVariantaDeRaspuns.save(intrebare, variantaDeRaspuns);
-                            serviceIntrebare.verificaFinalizare(intrebare);
-                            serviceChestionar.verificaFinalizare(intrebare.getChestionar());
-                            model.addAttribute("succes", true);
+                            try {
+                                serviceVariantaDeRaspuns.save(intrebare, variantaDeRaspuns);
+                                serviceIntrebare.verificaFinalizare(intrebare);
+                                serviceChestionar.verificaFinalizare(intrebare.getChestionar());
+                                model.addAttribute("succes", true);
+                            } catch (ServiceException e) {
+                                model.addAttribute("succes", false);
+                            }
                             model.addAttribute("intrebareId", intrebareId);
                             return "htmlfiles/administrator/adaugareVariantaDeRaspunsPtIntrebare.html";
                         } else {
@@ -147,7 +151,7 @@ public class ControllerVariantaDeRaspuns {
                                         variraspunsId);
                                 List<Intrebare> intrebariReturnateChestionarNou = serviceIntrebare.saveAll(intrebariChestionarNou);
 
-                                Optional<Intrebare> intrebareNouaOptional = intrebariChestionarNou
+                                Optional<Intrebare> intrebareNouaOptional = intrebariReturnateChestionarNou
                                         .stream()
                                         .filter(intrebareIter -> intrebareIter.getIntrebareId().equals(intrebare.getIntrebareId()))
                                         .findFirst();

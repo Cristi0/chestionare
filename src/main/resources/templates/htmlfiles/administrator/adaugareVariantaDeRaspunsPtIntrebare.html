@@ -31,9 +31,14 @@
                 <input type="text" id="intrebareId" name="intrebareId" th:value="${intrebareId}" readonly><br>
                 <button type="submit" class="btn btn-primary">Adaugare</button>
             </form>
-            <div th:if="${succes != null}" class="alert alert-success" role="alert">
-                Adaugare reusita!
-            </div>
+            <span th:if="${succes != null}">
+                <div th:if="${succes}" class="alert alert-success" role="alert">
+                    Adaugare reusita!
+                </div>
+                <div th:unless="${succes}" class="alert alert-danger" role="alert">
+                    Adaugare esuata!
+                </div>
+            </span>
         </div>
     </body>
 </html>

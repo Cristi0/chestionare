@@ -32,7 +32,7 @@ public class VariantaDeRaspuns {
     @JoinColumn(name = "intrebare_id")
     @Getter
     @Setter
-    private Intrebare intrebare;
+    private Intrebare intrebare; //entitatea VariantaDeRaspuns
 
     @Override
     public String toString() {
